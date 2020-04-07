@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,6 +24,13 @@ public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    public EventEntity(String description, String log, LevelEnum level, ApplicationEntity application) {
+        this.description = description;
+        this.log = log;
+        this.level = level;
+        this.application = application;
+    }
 
     @NotNull
     @NotBlank
@@ -43,7 +47,6 @@ public class EventEntity {
     private LocalDateTime createdAt;
 
     @NotNull
-    @NotBlank
     private LevelEnum level;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,6 +55,6 @@ public class EventEntity {
 
     @Positive
     @Column(columnDefinition = "int default 1")
-    private int quantity;
+    private int quantity = 1;
 
 }

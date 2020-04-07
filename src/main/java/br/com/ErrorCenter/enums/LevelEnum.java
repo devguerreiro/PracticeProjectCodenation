@@ -3,14 +3,14 @@ package br.com.ErrorCenter.enums;
 public enum LevelEnum {
     INFO("info"), WARNING("warning"), ERROR("error");
 
-    private String level;
+    private String name;
 
-    LevelEnum(String level) {
-        this.level = level;
+    LevelEnum(String name) {
+        this.name = name;
     }
 
-    public String getLevel() {
-        return level;
+    public String getName() {
+        return name;
     }
 
 }

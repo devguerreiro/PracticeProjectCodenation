@@ -24,6 +24,12 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class ApplicationEntity {
 
+    public ApplicationEntity(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

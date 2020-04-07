@@ -15,7 +15,7 @@ public class LevelConverter implements AttributeConverter<LevelEnum, String> {
             return null;
         }
 
-        return attribute.getLevel();
+        return attribute.name();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class LevelConverter implements AttributeConverter<LevelEnum, String> {
         }
 
         return Stream.of(LevelEnum.values())
-                .filter(level -> level.getLevel().equals(dbData))
+                .filter(level -> level.name().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

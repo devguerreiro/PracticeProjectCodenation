@@ -1,7 +1,9 @@
 package br.com.ErrorCenter.repositories;
 
 import br.com.ErrorCenter.entities.EventEntity;
+import br.com.ErrorCenter.enums.LevelEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -10,11 +12,11 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
-    List<EventEntity> findByLevel(String level);
+    List<EventEntity> findByLevel(LevelEnum level);
 
-    List<EventEntity> findByDescription(String description);
+    List<EventEntity> findByDescriptionContaining(String description);
 
-    List<EventEntity> findByLogId(Long logId);
+    List<EventEntity> findByLogContaining(String log);
 
     List<EventEntity> findByApplicationId(Long applicationId);
 
