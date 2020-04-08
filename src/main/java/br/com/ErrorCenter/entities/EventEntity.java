@@ -7,10 +7,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,14 +24,15 @@ import java.time.LocalDateTime;
 public class EventEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public EventEntity(String description, String log, LevelEnum level, ApplicationEntity application) {
-        this.description = description;
-        this.log = log;
-        this.level = level;
-        this.application = application;
+    private EventEntity(Builder builder) {
+        this.description = builder.description;
+        this.log = builder.log;
+        this.level = builder.level;
+        this.application = builder.application;
+        this.quantity = builder.quantity;
     }
 
     @NotNull
@@ -42,7 +45,6 @@ public class EventEntity {
     @Size(min = 10, max = 255)
     private String log;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -55,6 +57,45 @@ public class EventEntity {
 
     @Positive
     @Column(columnDefinition = "int default 1")
-    private int quantity = 1;
+    private Integer quantity;
+
+    public static class Builder {
+
+        private String description;
+        private String log;
+        private LevelEnum level;
+        private ApplicationEntity application;
+        private int quantity = 1;
+
+        public Builder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder withLog(String log) {
+            this.log = log;
+            return this;
+        }
+
+        public Builder withLevel(LevelEnum level) {
+            this.level = level;
+            return this;
+        }
+
+        public Builder withOrigin(ApplicationEntity application) {
+            this.application = application;
+            return this;
+        }
+
+        public Builder withQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public EventEntity build() {
+            return new EventEntity(this);
+        }
+
+    }
 
 }

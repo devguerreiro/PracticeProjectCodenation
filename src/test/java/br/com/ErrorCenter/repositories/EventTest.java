@@ -29,14 +29,42 @@ public class EventTest {
     @Autowired
     private EventRepository eventRepository;
 
-    LocalDateTime dateTimeTest;
+    private LocalDateTime dateTimeTest;
 
-    private ApplicationEntity app1 = new ApplicationEntity("conta azul", "conta@conta.com", "123456789");
+    private ApplicationEntity app1 = new ApplicationEntity.Builder()
+            .withName("conta azul")
+            .withEmail("conta@conta.com")
+            .withPassword("12345678")
+            .build();
 
-    private EventEntity event1 = new EventEntity("evento 1 fsdfs", "sfs dfs informacaofdfd", LevelEnum.INFO, app1);
-    private EventEntity event2 = new EventEntity("evento 2 sfsfs", "acesso sfsdf ", LevelEnum.WARNING, app1);
-    private EventEntity event3 = new EventEntity("evento 3 sfsdfs", "sfs dfs informacao", LevelEnum.INFO, app1);
-    private EventEntity event4 = new EventEntity("evento 4 sfsdfsd", "sistema sf sdf", LevelEnum.ERROR, app1);
+    private EventEntity event1 = new EventEntity.Builder()
+            .withDescription("descricao evento 1")
+            .withLog("log do evento 1")
+            .withLevel(LevelEnum.INFO)
+            .withOrigin(app1)
+            .build();
+
+    private EventEntity event2 = new EventEntity.Builder()
+            .withDescription("descricao evento 2")
+            .withLog("log do evento 2")
+            .withLevel(LevelEnum.ERROR)
+            .withOrigin(app1)
+            .build();
+
+    private EventEntity event3 = new EventEntity.Builder()
+            .withDescription("descricao evento 3")
+            .withLog("log do evento 3")
+            .withLevel(LevelEnum.INFO)
+            .withOrigin(app1)
+            .build();
+
+    private EventEntity event4 = new EventEntity.Builder()
+            .withDescription("descricao evento 4")
+            .withLog("log do evento 4")
+            .withLevel(LevelEnum.WARNING)
+            .withOrigin(app1)
+            .withQuantity(10)
+            .build();
 
     @Before
     public void init() {
@@ -51,20 +79,38 @@ public class EventTest {
     @Test
     public void saveValid() {
         EventEntity eventSaved = eventRepository.save(event1);
+        EventEntity eventSaved2 = eventRepository.save(event4);
 
         assertThat(eventSaved).isEqualTo(event1);
         assertThat(eventSaved.getCreatedAt()).isNotNull();
         assertThat(eventSaved.getLevel()).isEqualTo(LevelEnum.INFO);
         assertThat(eventSaved.getApplication()).isEqualTo(app1);
         assertThat(eventSaved.getQuantity()).isEqualTo(1);
+        assertThat(eventSaved2.getQuantity()).isEqualTo(10);
     }
 
     @Test
     public void saveInvalid() {
-        EventEntity event = new EventEntity();
+        EventEntity event1 = new EventEntity.Builder()
+                .withDescription("kfsmdkfmskfms")
+                .withLog("fsn")
+                .withLevel(LevelEnum.WARNING)
+                .withOrigin(app1)
+                .build();
+
+        EventEntity event2 = new EventEntity.Builder()
+                .withDescription("")
+                .withLog("fsnfdjnfssdfs")
+                .withLevel(LevelEnum.WARNING)
+                .withOrigin(app1)
+                .build();
 
         assertThatThrownBy(() -> {
-            eventRepository.saveAndFlush(event);
+            eventRepository.saveAndFlush(event1);
+        }).isInstanceOf(ConstraintViolationException.class);
+
+        assertThatThrownBy(() -> {
+            eventRepository.saveAndFlush(event2);
         }).isInstanceOf(ConstraintViolationException.class);
     }
 
@@ -97,7 +143,7 @@ public class EventTest {
 
     @Test
     public void findByLog() {
-        assertThat(eventRepository.findByLogContaining("sfs dfs informacao")).hasSize(2);
+        assertThat(eventRepository.findByLogContaining("evento 1")).hasSize(1);
     }
 
     @Test
@@ -112,7 +158,7 @@ public class EventTest {
 
     @Test
     public void findByQuantity() {
-        assertThat(eventRepository.findByQuantity(1)).hasSize(4);
+        assertThat(eventRepository.findByQuantity(1)).hasSize(3);
     }
 
 }

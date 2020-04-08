@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -24,14 +23,14 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class ApplicationEntity {
 
-    public ApplicationEntity(String name, String email, String password) {
+    private ApplicationEntity(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -49,11 +48,37 @@ public class ApplicationEntity {
     @Size(min = 8, max = 255)
     private String password;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "application", cascade = CascadeType.REMOVE) //nesse projeto não foi implementado Soft Delete
     private List<EventEntity> events;
+
+    public static class Builder {
+
+        private String name;
+        private String email;
+        private String password;
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public ApplicationEntity build() {
+            return new ApplicationEntity(name, email, password);
+        }
+
+    }
 
 }

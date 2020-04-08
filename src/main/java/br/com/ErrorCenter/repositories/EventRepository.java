@@ -3,7 +3,6 @@ package br.com.ErrorCenter.repositories;
 import br.com.ErrorCenter.entities.EventEntity;
 import br.com.ErrorCenter.enums.LevelEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -22,6 +21,6 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
     List<EventEntity> findByCreatedAt(LocalDateTime localDateTime);
 
-    List<EventEntity> findByQuantity(int quantity);
+    List<EventEntity> findByQuantity(Integer quantity);
 
 }

@@ -26,10 +26,26 @@ public class ApplicationTest {
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    private ApplicationEntity app1 = new ApplicationEntity("conta azul", "conta@conta.com", "123456789");
-    private ApplicationEntity app2 = new ApplicationEntity("conta verde", "conta@conta.com", "123456789");
-    private ApplicationEntity app3 = new ApplicationEntity("conta vermelha", "conta@conta.com", "123456789");
-    private ApplicationEntity app4 = new ApplicationEntity("conta preta", "conta@conta.com", "123456789");
+    private ApplicationEntity app1 = new ApplicationEntity.Builder()
+            .withName("conta azul")
+            .withEmail("conta@conta.com")
+            .withPassword("12345678")
+            .build();
+    private ApplicationEntity app2 = new ApplicationEntity.Builder()
+            .withName("conta verde")
+            .withEmail("conta@conta.com")
+            .withPassword("12345678")
+            .build();
+    private ApplicationEntity app3 = new ApplicationEntity.Builder()
+            .withName("conta vermelha")
+            .withEmail("conta@conta.com")
+            .withPassword("12345678")
+            .build();
+    private ApplicationEntity app4 = new ApplicationEntity.Builder()
+            .withName("conta preta")
+            .withEmail("conta@conta.com")
+            .withPassword("12345678")
+            .build();
 
     @Before
     public void init() {
@@ -50,7 +66,9 @@ public class ApplicationTest {
 
     @Test
     public void saveInvalid() {
-        ApplicationEntity app = new ApplicationEntity();
+        ApplicationEntity app = new ApplicationEntity.Builder()
+                .withName("teste para falhar")
+                .build();
 
         assertThatThrownBy(() -> {
             applicationRepository.saveAndFlush(app);

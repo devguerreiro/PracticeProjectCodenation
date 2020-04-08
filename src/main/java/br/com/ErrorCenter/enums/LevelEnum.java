@@ -1,16 +1,15 @@
 package br.com.ErrorCenter.enums;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum LevelEnum {
-    INFO("info"), WARNING("warning"), ERROR("error");
+    @JsonProperty("info")
+    INFO,
 
-    private String name;
+    @JsonProperty("warning")
+    WARNING,
 
-    LevelEnum(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("error")
+    ERROR;
 
 }
