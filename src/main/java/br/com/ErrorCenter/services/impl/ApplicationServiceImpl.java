@@ -4,9 +4,10 @@ import br.com.ErrorCenter.entities.ApplicationEntity;
 import br.com.ErrorCenter.repositories.ApplicationRepository;
 import br.com.ErrorCenter.services.interfaces.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,8 +17,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationRepository applicationRepository;
 
     @Override
-    public List<ApplicationEntity> findAll() {
-        return applicationRepository.findAll();
+    public Page<ApplicationEntity> findAll(Pageable pageable) {
+        return applicationRepository.findAll(pageable);
     }
 
     @Override

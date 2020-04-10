@@ -16,15 +16,15 @@ import br.com.ErrorCenter.repositories.ApplicationRepository;
 import br.com.ErrorCenter.repositories.EventRepository;
 import br.com.ErrorCenter.services.interfaces.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -48,44 +48,44 @@ public class EventServiceImpl implements EventService {
     private ApplicationListMapper applicationListMapper;
 
     @Override
-    public List<EventListDTO> findAllByAnyParam(
+    public Page<EventListDTO> findAllByAnyParam(
             LevelEnum level,
             String description,
             String log,
             Long application_id,
             LocalDateTime created_at,
-            Integer quantity
+            Integer quantity,
+            Pageable pageable
     ) {
 
         List<EventEntity> events = eventRepository.findAll();
-        Stream<EventEntity> stream;
 
         if (level != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> eventEntity.getLevel().equals(level))
                     .collect(Collectors.toList());
         }
 
         if (description != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> eventEntity.getDescription().contains(description))
                     .collect(Collectors.toList());
         }
 
         if (log != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> eventEntity.getLog().contains(log))
                     .collect(Collectors.toList());
         }
 
         if (application_id != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> eventEntity.getApplication().getId().equals(application_id))
                     .collect(Collectors.toList());
         }
 
         if (created_at != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> {
                         LocalDateTime dateTime = eventEntity.getCreatedAt();
 
@@ -97,47 +97,60 @@ public class EventServiceImpl implements EventService {
         }
 
         if (quantity != null) {
-            events = events.parallelStream()
+            events = events.stream()
                     .filter(eventEntity -> eventEntity.getQuantity().equals(quantity))
                     .collect(Collectors.toList());
         }
 
-        return eventListMapper.map(events);
+        long start = pageable.getOffset();
+        long end = (start + pageable.getPageSize()) > events.size() ? events.size() : (start + pageable.getPageSize());
+        List<EventListDTO> eventListDTOS = eventListMapper.map(events);
+
+        return new PageImpl<>(
+                eventListDTOS.subList((int) start, (int) end), pageable, events.size()
+        );
     }
 
     @Override
-    public List<EventListDTO> findAll() {
-        return eventListMapper.map(eventRepository.findAll());
+    public Page<EventListDTO> findAll(Pageable pageable) {
+        return eventRepository.findAll(pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByLevel(LevelEnum levelEnum) {
-        return eventListMapper.map(eventRepository.findByLevel(levelEnum));
+    public Page<EventListDTO> findAllByLevel(LevelEnum levelEnum, Pageable pageable) {
+        return eventRepository.findByLevel(levelEnum, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByDescription(String description) {
-        return eventListMapper.map(eventRepository.findByDescriptionContaining(description));
+    public Page<EventListDTO> findAllByDescription(String description, Pageable pageable) {
+        return eventRepository.findByDescriptionContaining(description, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByLog(String log) {
-        return eventListMapper.map(eventRepository.findByLogContaining(log));
+    public Page<EventListDTO> findAllByLog(String log, Pageable pageable) {
+        return eventRepository.findByLogContaining(log, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByApplication(Long id) {
-        return eventListMapper.map(eventRepository.findByApplicationId(id));
+    public Page<EventListDTO> findAllByApplication(Long id, Pageable pageable) {
+        return eventRepository.findByApplicationId(id, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByDate(LocalDateTime localDateTime) {
-        return eventListMapper.map(eventRepository.findByCreatedAt(localDateTime));
+    public Page<EventListDTO> findAllByDate(LocalDateTime localDateTime, Pageable pageable) {
+        return eventRepository.findByCreatedAt(localDateTime, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
-    public List<EventListDTO> findAllByQuantity(Integer quantity) {
-        return eventListMapper.map(eventRepository.findByQuantity(quantity));
+    public Page<EventListDTO> findAllByQuantity(Integer quantity, Pageable pageable) {
+        return eventRepository.findByQuantity(quantity, pageable)
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override

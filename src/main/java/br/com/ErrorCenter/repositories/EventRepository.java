@@ -2,25 +2,26 @@ package br.com.ErrorCenter.repositories;
 
 import br.com.ErrorCenter.entities.EventEntity;
 import br.com.ErrorCenter.enums.LevelEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
-    List<EventEntity> findByLevel(LevelEnum level);
+    Page<EventEntity> findByLevel(LevelEnum level, Pageable pageable);
 
-    List<EventEntity> findByDescriptionContaining(String description);
+    Page<EventEntity> findByDescriptionContaining(String description, Pageable pageable);
 
-    List<EventEntity> findByLogContaining(String log);
+    Page<EventEntity> findByLogContaining(String log, Pageable pageable);
 
-    List<EventEntity> findByApplicationId(Long applicationId);
+    Page<EventEntity> findByApplicationId(Long applicationId, Pageable pageable);
 
-    List<EventEntity> findByCreatedAt(LocalDateTime localDateTime);
+    Page<EventEntity> findByCreatedAt(LocalDateTime localDateTime, Pageable pageable);
 
-    List<EventEntity> findByQuantity(Integer quantity);
+    Page<EventEntity> findByQuantity(Integer quantity, Pageable pageable);
 
 }

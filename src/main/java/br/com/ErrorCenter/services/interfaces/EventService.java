@@ -4,34 +4,36 @@ import br.com.ErrorCenter.dtos.EventCreateDTO;
 import br.com.ErrorCenter.dtos.EventDetailDTO;
 import br.com.ErrorCenter.dtos.EventListDTO;
 import br.com.ErrorCenter.enums.LevelEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface EventService {
 
-    List<EventListDTO> findAllByAnyParam(
+    Page<EventListDTO> findAllByAnyParam(
             LevelEnum level,
             String description,
             String log,
             Long application_id,
             LocalDateTime created_at,
-            Integer quantity
+            Integer quantity,
+            Pageable pageable
     );
 
-    List<EventListDTO> findAll();
+    Page<EventListDTO> findAll(Pageable pageable);
 
-    List<EventListDTO> findAllByLevel(LevelEnum levelEnum);
+    Page<EventListDTO> findAllByLevel(LevelEnum levelEnum, Pageable pageable);
 
-    List<EventListDTO> findAllByDescription(String description);
+    Page<EventListDTO> findAllByDescription(String description, Pageable pageable);
 
-    List<EventListDTO> findAllByLog(String log);
+    Page<EventListDTO> findAllByLog(String log, Pageable pageable);
 
-    List<EventListDTO> findAllByApplication(Long id);
+    Page<EventListDTO> findAllByApplication(Long id, Pageable pageable);
 
-    List<EventListDTO> findAllByDate(LocalDateTime localDateTime);
+    Page<EventListDTO> findAllByDate(LocalDateTime localDateTime, Pageable pageable);
 
-    List<EventListDTO> findAllByQuantity(Integer quantity);
+    Page<EventListDTO> findAllByQuantity(Integer quantity, Pageable pageable);
 
     EventDetailDTO findById(Long eventId);
 
