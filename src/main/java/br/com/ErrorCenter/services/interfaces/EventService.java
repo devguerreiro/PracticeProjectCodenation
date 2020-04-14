@@ -11,16 +11,6 @@ import java.time.LocalDateTime;
 
 public interface EventService {
 
-    Page<EventListDTO> findAllByAnyParam(
-            LevelEnum level,
-            String description,
-            String log,
-            Long application_id,
-            LocalDateTime created_at,
-            Integer quantity,
-            Pageable pageable
-    );
-
     Page<EventListDTO> findAll(Pageable pageable);
 
     Page<EventListDTO> findAllByLevel(LevelEnum levelEnum, Pageable pageable);

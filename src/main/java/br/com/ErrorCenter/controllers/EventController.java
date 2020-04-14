@@ -8,8 +8,6 @@ import br.com.ErrorCenter.services.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,22 +26,6 @@ public class EventController {
         return new ResponseEntity<>(
                 eventService.save(eventCreateDTO),
                 HttpStatus.CREATED
-        );
-    }
-
-    @GetMapping("/params")
-    public ResponseEntity<Page<EventListDTO>> findAllByAnyParam(
-            @RequestParam(required = false) LevelEnum level,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) String log,
-            @RequestParam(required = false) Long application_id,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime created_at,
-            @RequestParam(required = false) Integer quantity,
-            Pageable pageable)
-    {
-        return new ResponseEntity<>(
-                eventService.findAllByAnyParam(level, description, log, application_id, created_at, quantity, pageable),
-                HttpStatus.OK
         );
     }
 

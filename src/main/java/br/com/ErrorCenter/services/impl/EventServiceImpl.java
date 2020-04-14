@@ -17,14 +17,10 @@ import br.com.ErrorCenter.repositories.EventRepository;
 import br.com.ErrorCenter.services.interfaces.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -46,70 +42,6 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private ApplicationListMapper applicationListMapper;
-
-    @Override
-    public Page<EventListDTO> findAllByAnyParam(
-            LevelEnum level,
-            String description,
-            String log,
-            Long application_id,
-            LocalDateTime created_at,
-            Integer quantity,
-            Pageable pageable
-    ) {
-
-        List<EventEntity> events = eventRepository.findAll();
-
-        if (level != null) {
-            events = events.stream()
-                    .filter(eventEntity -> eventEntity.getLevel().equals(level))
-                    .collect(Collectors.toList());
-        }
-
-        if (description != null) {
-            events = events.stream()
-                    .filter(eventEntity -> eventEntity.getDescription().contains(description))
-                    .collect(Collectors.toList());
-        }
-
-        if (log != null) {
-            events = events.stream()
-                    .filter(eventEntity -> eventEntity.getLog().contains(log))
-                    .collect(Collectors.toList());
-        }
-
-        if (application_id != null) {
-            events = events.stream()
-                    .filter(eventEntity -> eventEntity.getApplication().getId().equals(application_id))
-                    .collect(Collectors.toList());
-        }
-
-        if (created_at != null) {
-            events = events.stream()
-                    .filter(eventEntity -> {
-                        LocalDateTime dateTime = eventEntity.getCreatedAt();
-
-                        return dateTime != null &&
-                                dateTime.truncatedTo(ChronoUnit.SECONDS).equals(created_at);
-                    })
-                    .collect(Collectors.toList());
-
-        }
-
-        if (quantity != null) {
-            events = events.stream()
-                    .filter(eventEntity -> eventEntity.getQuantity().equals(quantity))
-                    .collect(Collectors.toList());
-        }
-
-        long start = pageable.getOffset();
-        long end = (start + pageable.getPageSize()) > events.size() ? events.size() : (start + pageable.getPageSize());
-        List<EventListDTO> eventListDTOS = eventListMapper.map(events);
-
-        return new PageImpl<>(
-                eventListDTOS.subList((int) start, (int) end), pageable, events.size()
-        );
-    }
 
     @Override
     public Page<EventListDTO> findAll(Pageable pageable) {
@@ -166,14 +98,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDetailDTO save(EventCreateDTO eventCreateDTO) {
         Long applicationId = eventCreateDTO.getOrigin_id();
-
         ApplicationEntity applicationEntity = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("application"));
 
         EventEntity eventEntity = eventCreateMapper.map(eventCreateDTO, applicationEntity);
-
-        eventEntity = eventRepository.save(eventEntity);
-
+        eventRepository.save(eventEntity);
         ApplicationListDTO applicationListDTO = applicationListMapper.map(applicationEntity);
 
         return eventDetailMapper.map(eventEntity, applicationListDTO);
