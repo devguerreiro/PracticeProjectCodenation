@@ -1,6 +1,7 @@
 package br.com.ErrorCenter.dtos;
 
 import br.com.ErrorCenter.enums.LevelEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,8 @@ public class EventDetailDTO {
     private String description;
     private LevelEnum level;
     private String log;
-    private ApplicationListDTO origin;
+    private ApplicationDTO origin;
+    @JsonFormat(pattern = "yyyy/dd/MM HH:mm:ss")
     private LocalDateTime createdAt;
     private int quantity;
 

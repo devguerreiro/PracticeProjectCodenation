@@ -1,6 +1,6 @@
 package br.com.ErrorCenter.services.impl;
 
-import br.com.ErrorCenter.dtos.ApplicationListDTO;
+import br.com.ErrorCenter.dtos.ApplicationDTO;
 import br.com.ErrorCenter.dtos.EventCreateDTO;
 import br.com.ErrorCenter.dtos.EventDetailDTO;
 import br.com.ErrorCenter.dtos.EventListDTO;
@@ -8,7 +8,7 @@ import br.com.ErrorCenter.entities.ApplicationEntity;
 import br.com.ErrorCenter.entities.EventEntity;
 import br.com.ErrorCenter.enums.LevelEnum;
 import br.com.ErrorCenter.exceptions.ResourceNotFoundException;
-import br.com.ErrorCenter.mappers.ApplicationListMapper;
+import br.com.ErrorCenter.mappers.ApplicationMapper;
 import br.com.ErrorCenter.mappers.EventCreateMapper;
 import br.com.ErrorCenter.mappers.EventDetailMapper;
 import br.com.ErrorCenter.mappers.EventListMapper;
@@ -27,72 +27,44 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventRepository eventRepository;
-
     @Autowired
     private ApplicationRepository applicationRepository;
 
     @Autowired
     private EventListMapper eventListMapper;
-
     @Autowired
     private EventDetailMapper eventDetailMapper;
-
     @Autowired
     private EventCreateMapper eventCreateMapper;
-
     @Autowired
-    private ApplicationListMapper applicationListMapper;
+    private ApplicationMapper applicationMapper;
 
     @Override
-    public Page<EventListDTO> findAll(Pageable pageable) {
-        return eventRepository.findAll(pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByLevel(LevelEnum levelEnum, Pageable pageable) {
-        return eventRepository.findByLevel(levelEnum, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByDescription(String description, Pageable pageable) {
-        return eventRepository.findByDescriptionContaining(description, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByLog(String log, Pageable pageable) {
-        return eventRepository.findByLogContaining(log, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByApplication(Long id, Pageable pageable) {
-        return eventRepository.findByApplicationId(id, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByDate(LocalDateTime localDateTime, Pageable pageable) {
-        return eventRepository.findByCreatedAt(localDateTime, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
-    }
-
-    @Override
-    public Page<EventListDTO> findAllByQuantity(Integer quantity, Pageable pageable) {
-        return eventRepository.findByQuantity(quantity, pageable)
-                .map(eventEntity -> eventListMapper.map(eventEntity));
+    public Page<EventListDTO> findByAny(LevelEnum level,
+                                        String description,
+                                        String log,
+                                        Long applicationId,
+                                        LocalDateTime date,
+                                        Integer quantity,
+                                        Pageable pageable)
+    {
+        return eventRepository.findByAny(level,
+                description,
+                log,
+                applicationId,
+                date,
+                quantity,
+                pageable).map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
     public EventDetailDTO findById(Long eventId) {
         EventEntity eventEntity = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("evento"));
+                .orElseThrow(() -> new ResourceNotFoundException("event"));
 
-        ApplicationListDTO applicationListDTO = applicationListMapper.map(eventEntity.getApplication());
+        ApplicationDTO applicationDTO = applicationMapper.map(eventEntity.getApplication());
 
-        return eventDetailMapper.map(eventEntity, applicationListDTO);
+        return eventDetailMapper.map(eventEntity, applicationDTO);
     }
 
     @Override
@@ -103,9 +75,9 @@ public class EventServiceImpl implements EventService {
 
         EventEntity eventEntity = eventCreateMapper.map(eventCreateDTO, applicationEntity);
         eventRepository.save(eventEntity);
-        ApplicationListDTO applicationListDTO = applicationListMapper.map(applicationEntity);
+        ApplicationDTO applicationDTO = applicationMapper.map(applicationEntity);
 
-        return eventDetailMapper.map(eventEntity, applicationListDTO);
+        return eventDetailMapper.map(eventEntity, applicationDTO);
     }
 
 }

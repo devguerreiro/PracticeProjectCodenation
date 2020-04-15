@@ -15,7 +15,7 @@ public interface EventCreateMapper {
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "application", source = "applicationEntity")
+            @Mapping(target = "application", source = "applicationEntity"),
     })
     EventEntity map(EventCreateDTO eventCreateDTO, ApplicationEntity applicationEntity);
 

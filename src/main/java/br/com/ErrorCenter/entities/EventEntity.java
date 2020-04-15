@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,12 +17,15 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "Event")
 @EntityListeners(value = AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(of = "id")
 public class EventEntity {
+
+    public static final Integer DEFAULT_QUANTITY = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +61,7 @@ public class EventEntity {
 
     @Positive
     @Column(columnDefinition = "int default 1")
-    private Integer quantity;
+    private Integer quantity = DEFAULT_QUANTITY;
 
     public static class Builder {
 
@@ -65,7 +69,7 @@ public class EventEntity {
         private String log;
         private LevelEnum level;
         private ApplicationEntity application;
-        private int quantity = 1;
+        private Integer quantity = DEFAULT_QUANTITY;
 
         public Builder withDescription(String description) {
             this.description = description;

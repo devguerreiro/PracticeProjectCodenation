@@ -11,19 +11,15 @@ import java.time.LocalDateTime;
 
 public interface EventService {
 
-    Page<EventListDTO> findAll(Pageable pageable);
-
-    Page<EventListDTO> findAllByLevel(LevelEnum levelEnum, Pageable pageable);
-
-    Page<EventListDTO> findAllByDescription(String description, Pageable pageable);
-
-    Page<EventListDTO> findAllByLog(String log, Pageable pageable);
-
-    Page<EventListDTO> findAllByApplication(Long id, Pageable pageable);
-
-    Page<EventListDTO> findAllByDate(LocalDateTime localDateTime, Pageable pageable);
-
-    Page<EventListDTO> findAllByQuantity(Integer quantity, Pageable pageable);
+    Page<EventListDTO> findByAny(
+            LevelEnum level,
+            String description,
+            String log,
+            Long applicationId,
+            LocalDateTime date,
+            Integer quantity,
+            Pageable pageable
+    );
 
     EventDetailDTO findById(Long eventId);
 

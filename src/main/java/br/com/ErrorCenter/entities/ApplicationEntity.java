@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "Application")
 @EntityListeners(value = AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,6 +42,7 @@ public class ApplicationEntity {
     @NotNull
     @NotBlank
     @Email
+    @Column(unique = true)
     private String email;
 
     @NotNull
