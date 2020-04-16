@@ -19,8 +19,8 @@ public class EventListDTO {
     private String description;
     private LevelEnum level;
     private Long origin_id;
-    @JsonFormat(pattern = "yyyy/dd/MM HH:mm:ss")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private LocalDateTime created_at;
     private int quantity;
 
 }

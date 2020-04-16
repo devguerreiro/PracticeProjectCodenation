@@ -8,7 +8,6 @@ import br.com.ErrorCenter.services.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public class EventController {
             @RequestParam(required = false) LevelEnum level,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String log,
-            @RequestParam(required = false) Long applicationId,
+            @RequestParam(required = false) Long application_id,
             @RequestParam(required = false) LocalDateTime date,
             @RequestParam(required = false) Integer quantity,
             Pageable pageable
@@ -38,7 +37,7 @@ public class EventController {
                         level,
                         description,
                         log,
-                        applicationId,
+                        application_id,
                         date,
                         quantity,
                         pageable

@@ -12,7 +12,7 @@ public interface EventDetailMapper {
 
     @Mappings({
             @Mapping(target = "id", source = "eventEntity.id"),
-            @Mapping(target = "createdAt", source = "eventEntity.createdAt"),
+            @Mapping(target = "created_at", source = "eventEntity.createdAt"),
             @Mapping(target = "origin", source = "applicationDTO")
     })
     EventDetailDTO map(EventEntity eventEntity, ApplicationDTO applicationDTO);

@@ -18,7 +18,9 @@ import br.com.ErrorCenter.services.interfaces.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -48,19 +50,25 @@ public class EventServiceImpl implements EventService {
                                         Integer quantity,
                                         Pageable pageable)
     {
-        return eventRepository.findByAny(level,
+        return eventRepository.findByAny(
+                level,
                 description,
                 log,
                 applicationId,
                 date,
                 quantity,
-                pageable).map(eventEntity -> eventListMapper.map(eventEntity));
+                pageable
+        )
+                .map(eventEntity -> eventListMapper.map(eventEntity));
     }
 
     @Override
     public EventDetailDTO findById(Long eventId) {
         EventEntity eventEntity = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("event"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException("event").getMessage()
+                ));
 
         ApplicationDTO applicationDTO = applicationMapper.map(eventEntity.getApplication());
 
@@ -71,7 +79,10 @@ public class EventServiceImpl implements EventService {
     public EventDetailDTO save(EventCreateDTO eventCreateDTO) {
         Long applicationId = eventCreateDTO.getOrigin_id();
         ApplicationEntity applicationEntity = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException("application"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException("application").getMessage()
+                ));
 
         EventEntity eventEntity = eventCreateMapper.map(eventCreateDTO, applicationEntity);
         eventRepository.save(eventEntity);
