@@ -15,6 +15,7 @@ import br.com.ErrorCenter.mappers.EventListMapper;
 import br.com.ErrorCenter.repositories.ApplicationRepository;
 import br.com.ErrorCenter.repositories.EventRepository;
 import br.com.ErrorCenter.services.interfaces.EventService;
+import br.com.ErrorCenter.utils.VerificationOfId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +51,10 @@ public class EventServiceImpl implements EventService {
                                         Integer quantity,
                                         Pageable pageable)
     {
+        if (applicationId != null) {
+            VerificationOfId.verifyIfIsSmallerThan0AndThrow(applicationId);
+        }
+
         return eventRepository.findByAny(
                 level,
                 description,
@@ -64,6 +69,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDetailDTO findById(Long eventId) {
+        VerificationOfId.verifyIfIsSmallerThan0AndThrow(eventId);
+
         EventEntity eventEntity = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -78,6 +85,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDetailDTO save(EventCreateDTO eventCreateDTO) {
         Long applicationId = eventCreateDTO.getOrigin_id();
+
+        VerificationOfId.verifyIfIsSmallerThan0AndThrow(applicationId);
+
         ApplicationEntity applicationEntity = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,

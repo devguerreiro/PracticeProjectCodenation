@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RequestMapping("/application")
 @RestController
 public class ApplicationController {
@@ -19,7 +21,7 @@ public class ApplicationController {
     private ApplicationServiceImpl applicationService;
 
     @PostMapping
-    public ResponseEntity<ApplicationDTO> create(@RequestBody ApplicationEntity applicationEntity) {
+    public ResponseEntity<ApplicationDTO> create(@Valid @RequestBody ApplicationEntity applicationEntity) {
         return new ResponseEntity<>(
                 applicationService.save(applicationEntity),
                 HttpStatus.CREATED
