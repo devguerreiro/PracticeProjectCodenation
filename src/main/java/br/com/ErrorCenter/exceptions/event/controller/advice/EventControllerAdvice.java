@@ -20,48 +20,42 @@ import org.springframework.dao.DataIntegrityViolationException;
 @RestControllerAdvice
 public class EventControllerAdvice {
 
+    private final HttpStatus BAD_REQUEST = HttpStatus.BAD_REQUEST;
+
     @ExceptionHandler(NumberFormatException.class)
     @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleNumberFormatException(NumberFormatException exception, ServletWebRequest request) {
-        final HttpStatus STATUS_CODE = HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity<>(
+        return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
                 .withTimestamp(ZonedDateTime.now())
-                .withStatus(STATUS_CODE.value())
+                .withStatus(BAD_REQUEST.value())
                 .withError(exception.getLocalizedMessage())
                 .withMessage("input must be a number")
                 .withPath(request.getRequest().getRequestURI())
-                .build(),
-                STATUS_CODE
+                .build()
         );
     }
 
     @ExceptionHandler(InvalidFormatException.class)
     @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleInvalidFormatException(InvalidFormatException exception, ServletWebRequest request) {
-        final HttpStatus STATUS_CODE = HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity<>(
+        return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
                 .withTimestamp(ZonedDateTime.now())
-                .withStatus(STATUS_CODE.value())
+                .withStatus(BAD_REQUEST.value())
                 .withError(exception.getOriginalMessage())
                 .withMessage(
                         exception.getValue().toString() +
                         " is not a valid value."
                 )
                 .withPath(request.getRequest().getRequestURI())
-                .build(),
-                STATUS_CODE
+                .build()
         );
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleConstraintViolationException(ConstraintViolationException exception, ServletWebRequest request) {
-        final HttpStatus STATUS_CODE = HttpStatus.BAD_REQUEST;
-
         List<HashMap<String, String>> errorPerField = new ArrayList<>();
 
         exception.getConstraintViolations().forEach(constraintViolation -> {
@@ -71,32 +65,28 @@ public class EventControllerAdvice {
             errorPerField.add(error);
         });
 
-        return new ResponseEntity<>(
+        return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
                 .withTimestamp(ZonedDateTime.now())
-                .withStatus(STATUS_CODE.value())
+                .withStatus(BAD_REQUEST.value())
                 .withError("Validation error")
                 .withMessage(errorPerField.toString())
                 .withPath(request.getRequest().getRequestURI())
-                .build(),
-                STATUS_CODE
+                .build()
         );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleDataIntegrityViolationException(DataIntegrityViolationException exception, ServletWebRequest request) {
-        final HttpStatus STATUS_CODE = HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity<>(
+        return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
                 .withTimestamp(ZonedDateTime.now())
-                .withStatus(STATUS_CODE.value())
-                .withError("Data integrity violation")
+                .withStatus(BAD_REQUEST.value())
+                .withError(exception.getMessage())
                 .withMessage("This e-mail already used")
                 .withPath(request.getRequest().getRequestURI())
-                .build(),
-                STATUS_CODE
+                .build()
         );
     }
 

@@ -1,5 +1,6 @@
 package br.com.ErrorCenter.services.impl;
 
+import br.com.ErrorCenter.dtos.LoginDTO;
 import br.com.ErrorCenter.repositories.ApplicationRepository;
 import br.com.ErrorCenter.services.interfaces.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public UserDetails loadUserByEmail(String email) {
-        return applicationRepository.findByEmail(email).stream()
+        return new LoginDTO(applicationRepository.findByEmail(email).stream()
                 .findFirst()
-                .orElseThrow(() -> new InvalidGrantException("Bad credentials"));
+                //não deve informar que o usuário não foi encontrado por questões de boas práticas de segurança
+                .orElseThrow(() -> new InvalidGrantException("Bad credentials")));
     }
 
 }
