@@ -23,7 +23,6 @@ public class EventControllerAdvice {
     private final HttpStatus BAD_REQUEST = HttpStatus.BAD_REQUEST;
 
     @ExceptionHandler(NumberFormatException.class)
-    @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleNumberFormatException(NumberFormatException exception, ServletWebRequest request) {
         return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
@@ -37,7 +36,6 @@ public class EventControllerAdvice {
     }
 
     @ExceptionHandler(InvalidFormatException.class)
-    @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleInvalidFormatException(InvalidFormatException exception, ServletWebRequest request) {
         return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
@@ -54,7 +52,6 @@ public class EventControllerAdvice {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleConstraintViolationException(ConstraintViolationException exception, ServletWebRequest request) {
         List<HashMap<String, String>> errorPerField = new ArrayList<>();
 
@@ -77,7 +74,6 @@ public class EventControllerAdvice {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseBody
     public ResponseEntity<GenericExceptionResponseDTO> handleDataIntegrityViolationException(DataIntegrityViolationException exception, ServletWebRequest request) {
         return ResponseEntity.badRequest().body(
                 new GenericExceptionResponseDTO.Builder()
