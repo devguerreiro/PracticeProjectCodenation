@@ -73,17 +73,4 @@ public class EventControllerAdvice {
         );
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<GenericExceptionResponseDTO> handleDataIntegrityViolationException(DataIntegrityViolationException exception, ServletWebRequest request) {
-        return ResponseEntity.badRequest().body(
-                new GenericExceptionResponseDTO.Builder()
-                .withTimestamp(ZonedDateTime.now())
-                .withStatus(BAD_REQUEST.value())
-                .withError(exception.getMessage())
-                .withMessage("This e-mail already used")
-                .withPath(request.getRequest().getRequestURI())
-                .build()
-        );
-    }
-
 }
