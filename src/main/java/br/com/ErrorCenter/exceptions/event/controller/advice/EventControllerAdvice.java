@@ -1,6 +1,7 @@
 package br.com.ErrorCenter.exceptions.event.controller.advice;
 
 import br.com.ErrorCenter.dtos.GenericExceptionResponseDTO;
+import br.com.ErrorCenter.exceptions.event.EmailAlreadyUsedException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,19 @@ public class EventControllerAdvice {
                 .withStatus(BAD_REQUEST.value())
                 .withError("Validation error")
                 .withMessage(errorPerField.toString())
+                .withPath(request.getRequest().getRequestURI())
+                .build()
+        );
+    }
+
+    @ExceptionHandler(EmailAlreadyUsedException.class)
+    public ResponseEntity<GenericExceptionResponseDTO> handleEmailAlreadyUsedException(EmailAlreadyUsedException exception, ServletWebRequest request) {
+        return ResponseEntity.badRequest().body(
+                new GenericExceptionResponseDTO.Builder()
+                .withTimestamp(ZonedDateTime.now())
+                .withStatus(BAD_REQUEST.value())
+                .withError("Validation error")
+                .withMessage(exception.getMessage())
                 .withPath(request.getRequest().getRequestURI())
                 .build()
         );

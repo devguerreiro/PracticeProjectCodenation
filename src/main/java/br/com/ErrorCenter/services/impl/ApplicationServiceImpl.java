@@ -27,10 +27,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public ApplicationDTO save(ApplicationEntity applicationEntity) {
         if (existsByEmail(applicationEntity.getEmail())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    new EmailAlreadyUsedException().getMessage()
-            );
+            throw new EmailAlreadyUsedException();
         }
 
         applicationEntity.setPassword(
