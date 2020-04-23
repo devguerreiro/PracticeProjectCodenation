@@ -32,35 +32,21 @@ public class EventController {
             Pageable pageable
     )
     {
-        return new ResponseEntity<>(
-                eventService.findByAny(
-                        level,
-                        description,
-                        log,
-                        application_id,
-                        date,
-                        quantity,
-                        pageable
-                ),
-                HttpStatus.OK
+        return ResponseEntity.ok(
+                eventService.findByAny(level, description, log, application_id, date, quantity, pageable)
         );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDetailDTO> retrieve(@PathVariable Long id)
     {
-        return new ResponseEntity<>(
-                eventService.findById(id),
-                HttpStatus.OK
-        );
+        return ResponseEntity.ok(eventService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<EventDetailDTO> create(@RequestBody EventCreateDTO eventCreateDTO) {
-        return new ResponseEntity<>(
-                eventService.save(eventCreateDTO),
-                HttpStatus.CREATED
-        );
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventDetailDTO create(@RequestBody EventCreateDTO eventCreateDTO) {
+        return eventService.save(eventCreateDTO);
     }
 
 }

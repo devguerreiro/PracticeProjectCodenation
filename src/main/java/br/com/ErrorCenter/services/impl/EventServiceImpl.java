@@ -32,7 +32,6 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
     @Autowired
     private ApplicationRepository applicationRepository;
-
     @Autowired
     private EventListMapper eventListMapper;
     @Autowired

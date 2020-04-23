@@ -5,11 +5,7 @@ import br.com.ErrorCenter.entities.ApplicationEntity;
 import br.com.ErrorCenter.services.impl.ApplicationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,11 +17,9 @@ public class ApplicationController {
     private ApplicationServiceImpl applicationService;
 
     @PostMapping
-    public ResponseEntity<ApplicationDTO> create(@Valid @RequestBody ApplicationEntity applicationEntity) {
-        return new ResponseEntity<>(
-                applicationService.save(applicationEntity),
-                HttpStatus.CREATED
-        );
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApplicationDTO create(@Valid @RequestBody ApplicationEntity applicationEntity) {
+        return applicationService.save(applicationEntity);
     }
 
 }
