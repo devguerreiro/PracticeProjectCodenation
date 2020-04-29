@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -12,7 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -50,8 +49,7 @@ public class ApplicationEntity {
     @Size(min = 8, max = 255)
     private String password;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @OneToMany(mappedBy = "application", cascade = CascadeType.REMOVE) //nesse projeto não foi implementado Soft Delete
     private List<EventEntity> events;

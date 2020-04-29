@@ -7,10 +7,10 @@ import br.com.ErrorCenter.mappers.ApplicationMapper;
 import br.com.ErrorCenter.repositories.ApplicationRepository;
 import br.com.ErrorCenter.services.interfaces.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
@@ -33,11 +33,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         applicationEntity.setPassword(
                 passwordEncoder.encode(applicationEntity.getPassword())
         );
+        applicationEntity.setCreatedAt(OffsetDateTime.now());
+
         return applicationMapper.map(applicationRepository.save(applicationEntity));
     }
 
     private boolean existsByEmail(String email) {
-        return !applicationRepository.findByEmail(email).isEmpty();
+        return applicationRepository.findByEmail(email).isPresent();
     }
 
 }

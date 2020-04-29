@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Repository
 public interface EventRepository extends JpaRepository<EventEntity, Long>, JpaSpecificationExecutor<EventEntity> {
@@ -27,7 +27,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>, JpaSp
             @Param("description") String description,
             @Param("log") String log,
             @Param("applicationId") Long applicationId,
-            @Param("date") LocalDateTime date,
+            @Param("date") OffsetDateTime date,
             @Param("quantity") Integer quantity,
             Pageable pageable
     );

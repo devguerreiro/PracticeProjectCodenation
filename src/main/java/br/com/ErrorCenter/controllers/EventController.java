@@ -3,6 +3,7 @@ package br.com.ErrorCenter.controllers;
 import br.com.ErrorCenter.dtos.EventCreateDTO;
 import br.com.ErrorCenter.dtos.EventDetailDTO;
 import br.com.ErrorCenter.dtos.EventListDTO;
+import br.com.ErrorCenter.entities.ApplicationEntity;
 import br.com.ErrorCenter.enums.LevelEnum;
 import br.com.ErrorCenter.services.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
+import java.security.Principal;
+import java.time.OffsetDateTime;
 
 @RequestMapping("/event")
 @RestController
@@ -27,7 +30,7 @@ public class EventController {
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String log,
             @RequestParam(required = false) Long application_id,
-            @RequestParam(required = false) LocalDateTime date,
+            @RequestParam(required = false) OffsetDateTime date,
             @RequestParam(required = false) Integer quantity,
             Pageable pageable
     )
@@ -45,8 +48,8 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventDetailDTO create(@RequestBody EventCreateDTO eventCreateDTO) {
-        return eventService.save(eventCreateDTO);
+    public EventDetailDTO create(@Valid @RequestBody EventCreateDTO eventCreateDTO, Principal principal) {
+        return eventService.save(eventCreateDTO, principal.getName());
     }
 
 }

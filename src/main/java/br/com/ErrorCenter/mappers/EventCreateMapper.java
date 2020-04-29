@@ -10,7 +10,6 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface EventCreateMapper {
 
-    @Mapping(target = "origin_id", source = "eventEntity.application.id")
     EventCreateDTO map(EventEntity eventEntity);
 
     @Mappings({

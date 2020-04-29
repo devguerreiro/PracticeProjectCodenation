@@ -6,7 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class VerificationOfId {
 
-    public static void verifyIfIsSmallerThan0AndThrow(Long id) {
+    public static void isValidId(Long id) {
         if (id < 0) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
