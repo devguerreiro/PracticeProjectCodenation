@@ -263,8 +263,26 @@ public class EventRepositoryTest {
                                                             ).getSize();
         //deve retornar no maximo {pageSize} elementos por pagina
         assertThat(numberOfElements).isEqualTo(pageSize);
+    }
 
-        //ToDo adicionar sort
+    @Test
+    public void findByMoreThanOneParam() {
+        EventEntity event3 = new EventEntity.Builder()
+                .withDescription("qualquer descricao3")
+                .withLevel(LevelEnum.ERROR)
+                .withLog("qualquer log3")
+                .withOrigin(app)
+                .build();
+        Integer numberOfElements = eventRepository.findByAny(
+                LevelEnum.ERROR,
+                "qualquer descricao",
+                "qualquer log3",
+                app.getId(),
+                null,
+                null,
+                null).getSize();
+
+        assertThat(numberOfElements).isEqualTo(1);
     }
 
 }
