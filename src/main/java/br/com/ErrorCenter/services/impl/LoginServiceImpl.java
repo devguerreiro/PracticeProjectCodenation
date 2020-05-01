@@ -16,7 +16,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
-
     @Autowired
     private MessageSource messageSource;
 

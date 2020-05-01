@@ -17,10 +17,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
-
     @Autowired
     private ApplicationMapper applicationMapper;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -38,7 +36,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationMapper.map(applicationRepository.save(applicationEntity));
     }
 
-    private boolean existsByEmail(String email) {
+    public boolean existsByEmail(String email) {
         return applicationRepository.findByEmail(email).isPresent();
     }
 
