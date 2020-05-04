@@ -32,11 +32,13 @@ public class ApplicationServiceImpl implements ApplicationService {
                 passwordEncoder.encode(applicationEntity.getPassword())
         );
         applicationEntity.setCreatedAt(OffsetDateTime.now());
-
+        System.out.println(applicationEntity);
+//        System.out.println(applicationMapper.map(applicationRepository.save(applicationEntity)));
         return applicationMapper.map(applicationRepository.save(applicationEntity));
     }
 
     public boolean existsByEmail(String email) {
+        System.out.println("jnfnsdjfds");
         return applicationRepository.findByEmail(email).isPresent();
     }
 
