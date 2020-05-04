@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.ErrorCenter.services.EventServiceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-05-04T06:23:57" hostname="guerreiro" time="0.586">
+  <properties/>
+  <testcase name="findById" classname="br.com.ErrorCenter.services.EventServiceTest" time="0.537"/>
+  <testcase name="save" classname="br.com.ErrorCenter.services.EventServiceTest" time="0.027"/>
+  <testcase name="findByAny" classname="br.com.ErrorCenter.services.EventServiceTest" time="0.021"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
