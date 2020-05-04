@@ -46,7 +46,7 @@ public class EventServiceImpl implements EventService {
                                         String description,
                                         String log,
                                         Long applicationId,
-                                        OffsetDateTime date,
+                                        OffsetDateTime createdAt,
                                         Integer quantity,
                                         Pageable pageable)
     {
@@ -59,7 +59,7 @@ public class EventServiceImpl implements EventService {
                 description,
                 log,
                 applicationId,
-                date,
+                createdAt,
                 quantity,
                 pageable
         )

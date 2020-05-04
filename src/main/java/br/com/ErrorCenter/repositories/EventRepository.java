@@ -20,14 +20,14 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>, JpaSp
             "(:description is null or event.description like %:description%) AND\n" +
             "(:log is null or event.log like %:log%) AND\n" +
             "(:applicationId is null or event.application.id = :applicationId) AND\n" +
-            "(:date is null or event.createdAt = :date) AND\n" +
+            "(cast(:createdAt as timestamp) is null or event.createdAt = :createdAt) AND\n" +
             "(:quantity is null or event.quantity = :quantity)")
     Page<EventEntity> findByAny(
             @Param("level") LevelEnum level,
             @Param("description") String description,
             @Param("log") String log,
             @Param("applicationId") Long applicationId,
-            @Param("date") OffsetDateTime date,
+            @Param("createdAt") OffsetDateTime createdAt,
             @Param("quantity") Integer quantity,
             Pageable pageable
     );

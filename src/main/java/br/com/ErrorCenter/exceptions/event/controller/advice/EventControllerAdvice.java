@@ -5,16 +5,14 @@ import br.com.ErrorCenter.exceptions.event.EmailAlreadyUsedException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestControllerAdvice
 public class EventControllerAdvice {
@@ -106,6 +104,24 @@ public class EventControllerAdvice {
                 .withStatus(BAD_REQUEST.value())
                 .withError("Validation error")
                 .withMessage(errors)
+                .withPath(request.getRequest().getRequestURI())
+                .build()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<GenericExceptionResponseDTO> handleTest(MethodArgumentTypeMismatchException exception, ServletWebRequest request) {
+        String message = exception.getMessage();
+
+        if (Objects.equals(exception.getParameter().getParameterName(), "created_at")) {
+            message = "Parameter must be a valid format like this: 2020-05-04T00:40:28.612-03:00";
+        }
+
+        return ResponseEntity.badRequest().body(
+                new GenericExceptionResponseDTO.Builder()
+                .withStatus(BAD_REQUEST.value())
+                .withError("Bad request")
+                .withMessage(Collections.singletonList(message))
                 .withPath(request.getRequest().getRequestURI())
                 .build()
         );

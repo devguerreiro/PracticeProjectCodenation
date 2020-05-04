@@ -7,7 +7,6 @@ import br.com.ErrorCenter.enums.LevelEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 public interface EventService {
@@ -17,7 +16,7 @@ public interface EventService {
             String description,
             String log,
             Long applicationId,
-            OffsetDateTime date,
+            OffsetDateTime createdAt,
             Integer quantity,
             Pageable pageable
     );
