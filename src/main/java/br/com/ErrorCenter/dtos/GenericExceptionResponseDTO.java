@@ -3,16 +3,18 @@ package br.com.ErrorCenter.dtos;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 @Setter
 public class GenericExceptionResponseDTO {
 
-    private ZonedDateTime timestamp;
+    private OffsetDateTime timestamp;
     private int status;
     private String error;
-    private String message;
+    private List<?> message;
     private String path;
 
     private GenericExceptionResponseDTO(Builder builder) {
@@ -25,16 +27,11 @@ public class GenericExceptionResponseDTO {
 
     public static class Builder {
 
-        private ZonedDateTime timestamp;
+        private final OffsetDateTime timestamp = OffsetDateTime.now();
         private int status;
         private String error;
-        private String message;
+        private List<?> message;
         private String path;
-
-        public Builder withTimestamp(ZonedDateTime timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
 
         public Builder withStatus(int status) {
             this.status = status;
@@ -46,7 +43,7 @@ public class GenericExceptionResponseDTO {
             return this;
         }
 
-        public Builder withMessage(String message) {
+        public Builder withMessage(List<?> message) {
             this.message = message;
             return this;
         }

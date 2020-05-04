@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public interface EventService {
 
@@ -16,13 +17,13 @@ public interface EventService {
             String description,
             String log,
             Long applicationId,
-            LocalDateTime date,
+            OffsetDateTime date,
             Integer quantity,
             Pageable pageable
     );
 
     EventDetailDTO findById(Long eventId);
 
-    EventDetailDTO save(EventCreateDTO eventCreateDTO);
+    EventDetailDTO save(EventCreateDTO eventCreateDTO, String userEmail);
 
 }

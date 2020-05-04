@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -46,12 +46,12 @@ public class EventServiceImpl implements EventService {
                                         String description,
                                         String log,
                                         Long applicationId,
-                                        LocalDateTime date,
+                                        OffsetDateTime date,
                                         Integer quantity,
                                         Pageable pageable)
     {
         if (applicationId != null) {
-            VerificationOfId.verifyIfIsSmallerThan0AndThrow(applicationId);
+            VerificationOfId.isValidId(applicationId);
         }
 
         return eventRepository.findByAny(
@@ -68,7 +68,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDetailDTO findById(Long eventId) {
-        VerificationOfId.verifyIfIsSmallerThan0AndThrow(eventId);
+        VerificationOfId.isValidId(eventId);
 
         EventEntity eventEntity = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -82,19 +82,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDetailDTO save(EventCreateDTO eventCreateDTO) {
-        Long applicationId = eventCreateDTO.getOrigin_id();
-
-        VerificationOfId.verifyIfIsSmallerThan0AndThrow(applicationId);
-
-        ApplicationEntity applicationEntity = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        new ResourceNotFoundException("application").getMessage()
-                ));
+    public EventDetailDTO save(EventCreateDTO eventCreateDTO, String userEmail) {
+        ApplicationEntity applicationEntity = applicationRepository.findByEmail(userEmail).get(); //sempre haverá, pois é o email do usuario logado
 
         EventEntity eventEntity = eventCreateMapper.map(eventCreateDTO, applicationEntity);
+        eventEntity.setCreatedAt(OffsetDateTime.now());
+
         eventRepository.save(eventEntity);
+
         ApplicationDTO applicationDTO = applicationMapper.map(applicationEntity);
 
         return eventDetailMapper.map(eventEntity, applicationDTO);

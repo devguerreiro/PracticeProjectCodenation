@@ -1,12 +1,11 @@
 package br.com.ErrorCenter.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +15,6 @@ public class ApplicationDTO {
 
     private Long id;
     private String name;
-    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    private LocalDateTime created_at;
+    private OffsetDateTime created_at;
 
 }
