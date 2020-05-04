@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

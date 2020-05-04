@@ -6,7 +6,6 @@ import br.com.ErrorCenter.dtos.EventDetailDTO;
 import br.com.ErrorCenter.dtos.EventListDTO;
 import br.com.ErrorCenter.entities.ApplicationEntity;
 import br.com.ErrorCenter.entities.EventEntity;
-import br.com.ErrorCenter.exceptions.event.InvalidIdException;
 import br.com.ErrorCenter.mappers.ApplicationMapper;
 import br.com.ErrorCenter.mappers.EventCreateMapper;
 import br.com.ErrorCenter.mappers.EventDetailMapper;
@@ -20,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.server.ResponseStatusException;
 

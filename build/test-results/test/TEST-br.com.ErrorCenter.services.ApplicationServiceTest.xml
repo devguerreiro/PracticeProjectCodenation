@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.ErrorCenter.services.ApplicationServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-04T06:23:58" hostname="guerreiro" time="0.01">
+<testsuite name="br.com.ErrorCenter.services.ApplicationServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-04T17:40:29" hostname="guerreiro" time="0.01">
   <properties/>
   <testcase name="save" classname="br.com.ErrorCenter.services.ApplicationServiceTest" time="0.01"/>
   <system-out><![CDATA[]]></system-out>
